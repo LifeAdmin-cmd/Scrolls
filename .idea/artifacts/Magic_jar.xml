@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Magic:jar">
+    <output-path>$PROJECT_DIR$/../server/plugins</output-path>
+    <root id="archive" name="Magic.jar">
+      <element id="module-output" name="Magic" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../dependecies/spigot-api-1.19.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
