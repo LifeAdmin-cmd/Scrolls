@@ -1,6 +1,5 @@
 package com.lifeadmin.magic.items;
 
-import com.lifeadmin.magic.messages.ChatError;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
