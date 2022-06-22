@@ -8,7 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -100,5 +102,13 @@ public class ScrollEvents implements Listener {
                 Chat.chatSuccess(player, "Spawn successfully written into the scroll!");
             }
         }
+    }
+
+    private static boolean playAnimation = false;
+
+    @EventHandler
+    private static void teleportAnimation(CraftItemEvent event) {
+//        if (!playAnimation) return;
+        System.out.println(event.getClickedInventory());
     }
 }

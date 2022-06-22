@@ -1,11 +1,13 @@
 package com.lifeadmin.magic.items;
 
 import com.lifeadmin.magic.Magic;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -15,13 +17,20 @@ import java.util.List;
 
 public class ItemManager {
 
-    public static ItemStack scrollOfTeleportation;
+    public ItemStack scrollOfTeleportation;
 
-    public static void init() {
-        createTeleportScroll();
+    public ItemManager() {
+        this.createTeleportScroll();
+        this.addRecipes();
     }
 
-    private static void createTeleportScroll() {
+    public ItemStack getScrollOfTeleportation() {
+        this.createTeleportScroll();
+        System.out.println("getScroll hat das hier: " + this.scrollOfTeleportation);
+        return this.scrollOfTeleportation;
+    }
+
+    private void createTeleportScroll() {
         ItemStack item = new ItemStack(Material.PAPER, 1);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
@@ -43,6 +52,20 @@ public class ItemManager {
         scrollOfTeleportation = item;
     }
 
+    private void addRecipes() {
+        // Shaped Recipe
+        ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("scroll-of-teleportation"), this.scrollOfTeleportation);
+        sr.shape(
+                " D ",
+                " M ",
+                " C "
+        );
+        sr.setIngredient('D', Material.DIAMOND);
+        sr.setIngredient('M', Material.MAP);
+        sr.setIngredient('C', Material.RECOVERY_COMPASS);
+        System.out.println(sr);
+        Bukkit.getServer().addRecipe(sr);
+    }
 }
 
 //to-do:

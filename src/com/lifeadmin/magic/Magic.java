@@ -12,11 +12,16 @@ public class Magic extends JavaPlugin {
         return plugin;
     }
 
+    private static ItemManager itemManager;
+
+    public ItemManager getItemManager() {
+        return itemManager;
+    }
+
     @Override
     public void onEnable() {
         plugin = this;
-
-        ItemManager.init();
+        itemManager = new ItemManager();
         MagicCommands commands = new MagicCommands();
         getCommand("basic_tp").setExecutor(commands);
         getServer().getPluginManager().registerEvents(new ScrollEvents(), this);

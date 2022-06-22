@@ -1,11 +1,11 @@
 package com.lifeadmin.magic.commands;
 
+import com.lifeadmin.magic.Magic;
 import com.lifeadmin.magic.items.ItemManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class MagicCommands implements CommandExecutor {
 
@@ -16,8 +16,10 @@ public class MagicCommands implements CommandExecutor {
 
         Player player = (Player) sender;
         if (cmd.getName().equalsIgnoreCase("basic_tp")) {
-            ItemManager.init();
-            player.getInventory().addItem(ItemManager.scrollOfTeleportation);
+            ItemManager itemManager = Magic.getPlugin().getItemManager();
+            System.out.println("Manager im Command: " + itemManager);
+            System.out.println("Managers return: " + itemManager.getScrollOfTeleportation());
+            player.getInventory().addItem(itemManager.getScrollOfTeleportation());
             return true;
         }
 
