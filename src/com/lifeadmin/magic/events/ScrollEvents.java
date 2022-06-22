@@ -4,46 +4,28 @@ import com.lifeadmin.magic.Magic;
 import com.lifeadmin.magic.items.ItemManager;
 import com.lifeadmin.magic.staticFunctions.Chat;
 import org.bukkit.*;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 public class ScrollEvents implements Listener {
-    private static boolean tpAgain = true;
-
-    /**
-     * Function to prevent a player from
-     * tp again for a certain time
-     * @param cooldown in miliseconds
-     */
-    public static void setTeleportCooldown(int cooldown) {
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        // your code here
-                        tpAgain = true;
-                    }
-                },
-                cooldown
-        );
-    }
+    private static LocalDateTime cooldownUntil = LocalDateTime.now();
 
     @EventHandler
     public static void onRightClick(PlayerToggleSneakEvent event) {
-        if (!tpAgain) {
-            Chat.chatError(event.getPlayer(), "You cannot use another scroll for some time!");
+        if (LocalDateTime.now().isBefore(cooldownUntil)) {
+            Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(cooldownUntil, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
             return;
         }
 
@@ -79,8 +61,7 @@ public class ScrollEvents implements Listener {
                         player.teleport(loc);
                         Chat.chatSuccess(player, "Teleport successful");
                         player.getInventory().removeItem(item);
-                        tpAgain = false;
-                        ScrollEvents.setTeleportCooldown(5000);
+                        cooldownUntil = LocalDateTime.now().plusSeconds(4);
                     } else {
                         Chat.chatError(player, "You are too far away from your Destination!");
                         Chat.chatWarning(player, "Your Destination: " +  Arrays.toString(cords));
@@ -105,8 +86,7 @@ public class ScrollEvents implements Listener {
                 PersistentDataContainer data = meta.getPersistentDataContainer();
 
                 // Check if item is a scroll (unused || used), otherwise returns
-                if (!(meta.equals(ItemManager.scrollOfTeleportation.getItemMeta())) &&
-                        !(data.has(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY))) return;
+                if (!(data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
 
                 Location loc = player.getTargetBlock(null, 100).getLocation();
 
