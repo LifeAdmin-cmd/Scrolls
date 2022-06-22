@@ -24,10 +24,7 @@ public class ScrollEvents implements Listener {
 
     @EventHandler
     public static void onRightClick(PlayerToggleSneakEvent event) {
-        if (LocalDateTime.now().isBefore(cooldownUntil)) {
-            Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(cooldownUntil, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
-            return;
-        }
+        if (!(event.getPlayer().isSneaking())) return;
 
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
 
@@ -37,12 +34,18 @@ public class ScrollEvents implements Listener {
                 Player player = event.getPlayer();
                 PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
                 if (!(data.has(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY))) {
-                    if (item.getItemMeta().equals(ItemManager.scrollOfTeleportation.getItemMeta())) {
+                    if ((data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) {
                         Chat.chatError(player, "There was no destination set for this scroll!");
                         return;
                     }
                     return;
                 }
+
+                if (LocalDateTime.now().isBefore(cooldownUntil)) {
+                    Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(cooldownUntil, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
+                    return;
+                }
+
                 int[] cords = data.get(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY);
 
                 int x = cords[0];
@@ -61,7 +64,7 @@ public class ScrollEvents implements Listener {
                         player.teleport(loc);
                         Chat.chatSuccess(player, "Teleport successful");
                         player.getInventory().removeItem(item);
-                        cooldownUntil = LocalDateTime.now().plusSeconds(4);
+                        cooldownUntil = LocalDateTime.now().plusSeconds(10);
                     } else {
                         Chat.chatError(player, "You are too far away from your Destination!");
                         Chat.chatWarning(player, "Your Destination: " +  Arrays.toString(cords));
