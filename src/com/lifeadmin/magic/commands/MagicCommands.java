@@ -2,6 +2,7 @@ package com.lifeadmin.magic.commands;
 
 import com.lifeadmin.magic.Magic;
 import com.lifeadmin.magic.items.ItemManager;
+import com.lifeadmin.magic.staticFunctions.Chat;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,10 +17,7 @@ public class MagicCommands implements CommandExecutor {
 
         Player player = (Player) sender;
         if (cmd.getName().equalsIgnoreCase("basic_tp")) {
-            ItemManager itemManager = Magic.getPlugin().getItemManager();
-            System.out.println("Manager im Command: " + itemManager);
-            System.out.println("Managers return: " + itemManager.getScrollOfTeleportation());
-            player.getInventory().addItem(itemManager.getScrollOfTeleportation());
+            Chat.chatSuccess(player, "Scroll Of Teleportation added to your inventory!");
             return true;
         }
 

@@ -1,6 +1,7 @@
 package com.lifeadmin.magic.items;
 
 import com.lifeadmin.magic.Magic;
+import com.lifeadmin.magic.staticFunctions.Calcs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -30,6 +31,13 @@ public class ItemManager {
         return this.scrollOfTeleportation;
     }
 
+    public ItemStack getCommandScrollOfTeleportation() {
+        ItemMeta meta = scrollOfTeleportation.getItemMeta();
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
+        return this.scrollOfTeleportation;
+    }
+
     private void createTeleportScroll() {
         ItemStack item = new ItemStack(Material.PAPER, 1);
         ItemMeta meta = item.getItemMeta();
@@ -42,10 +50,8 @@ public class ItemManager {
         meta.addEnchant(Enchantment.LUCK, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        // prevent scrolls from stacking and make it unique
+        // make scrolls identifiable
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        Double randomDouble = Math.floor(Math.random()*(Double.MAX_VALUE-Double.MIN_VALUE+1)+Double.MIN_VALUE);
-        data.set(new NamespacedKey(Magic.getPlugin(), String.valueOf(randomDouble)), PersistentDataType.DOUBLE, randomDouble);
         data.set(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");
 
         item.setItemMeta(meta);
