@@ -15,22 +15,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class ScrollEvents implements Listener {
-    private static LocalDateTime cooldownUntil = LocalDateTime.now();
+    private static final HashMap<UUID, LocalDateTime> cooldownArray = new HashMap<>();
 
     @EventHandler
-    public static void onRightClick(PlayerToggleSneakEvent event) {
+    public void onRightClick(PlayerToggleSneakEvent event) {
         if (!(event.getPlayer().isSneaking())) return;
 
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-
-//        while (event.getPlayer().getWalkSpeed() == 0) {
 
             if (item.getType() != Material.AIR) {
                 Player player = event.getPlayer();
@@ -43,8 +41,12 @@ public class ScrollEvents implements Listener {
                     return;
                 }
 
-                if (LocalDateTime.now().isBefore(cooldownUntil)) {
-                    Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(cooldownUntil, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
+                UUID id = player.getUniqueId();
+                cooldownArray.putIfAbsent(id, LocalDateTime.now());
+                LocalDateTime cooldownDateTime = cooldownArray.get(id);
+
+                if (LocalDateTime.now().isBefore(cooldownDateTime)) {
+                    Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(cooldownDateTime, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
                     return;
                 }
 
@@ -63,10 +65,10 @@ public class ScrollEvents implements Listener {
                 if (player.getWorld() == destinationWorld) {
                     if (distance <= maxDistance) {
                         Location loc = new Location(destinationWorld, x + 0.5, y, z + 0.5); // 0.5 places you in the middle of the Block
-                        player.teleport(loc);
-                        Chat.chatSuccess(player, "Teleport successful");
+                        shouldAnimationPlay = true;
                         player.getInventory().removeItem(item);
-                        cooldownUntil = LocalDateTime.now().plusSeconds(10);
+                        cooldownArray.put(id, LocalDateTime.now().plusSeconds(10));
+                        this.playTeleportAnimation(player, loc);
                     } else {
                         Chat.chatError(player, "You are too far away from your Destination!");
                         Chat.chatWarning(player, "Your Destination: " +  Arrays.toString(cords));
@@ -143,15 +145,19 @@ public class ScrollEvents implements Listener {
     }
 
     @EventHandler
-    private void teleportAnimation(PlayerMoveEvent event) {
-//        if (!shouldAnimationPlay) return;
+    private void preventMovementWhileTeleporting(PlayerMoveEvent event) {
+        if (!shouldAnimationPlay) return;
+        if (!event.getFrom().toVector().equals(event.getTo().toVector())) {
+            event.setCancelled(true);
+        }
+    }
 
-        Player player = event.getPlayer();
-        if (!((player.getInventory().getItemInMainHand().getType() == Material.STICK ) && (player.isSneaking()))) return;
-
-        if (getAnimationActiveStatus()) return;
+    private void playTeleportAnimation(Player player, Location loc) {
+        if (animationActiveStatus) return;
 
         setAnimationActiveStatus(true);
+
+        Bukkit.getWorld("world").playSound(loc, Sound.BLOCK_PORTAL_TRIGGER, 3.0F, 0.5F);
 
         Timer timer = new Timer();
         int duration = 8;//duration in seconds
@@ -160,6 +166,7 @@ public class ScrollEvents implements Listener {
             private int count = 0;
             private double circleHeight = 0;
             private double multiplier = 2 / ((double) repetitions * (double) duration);
+
             @Override
             public void run() {
                 count++;
@@ -167,26 +174,34 @@ public class ScrollEvents implements Listener {
                 if (count >= (duration * repetitions)) {
                     timer.cancel();
                     setAnimationActiveStatus(false);
-                    teleportPlayer();
+                    shouldAnimationPlay = false;
+
+                    teleportPlayer(player, loc);
                     return;
                 }
 
-//                if ((duration/repetitions) % count == 0 && circleMultiplier > 0) circleMultiplier--;
                 player.spawnParticle(Particle.DOLPHIN, player.getEyeLocation().add(0, 20, 0), 200, 0, 20, 0);
                 for (int degree = 0; degree < 360; degree++) {
                     double radians = Math.toRadians(degree);
-                    double x = Math.cos(radians);
-                    double z = Math.sin(radians);
+                    double x = Math.cos(radians)*1.5;
+                    double z = Math.sin(radians)*1.5;
                     Location loc = player.getLocation();
                     loc.add(x, circleHeight - 0.5, z);
                     player.spawnParticle(Particle.PORTAL, loc, 0, 0, 0, 0);
                 }
             }
         }, 0, (1000/repetitions));//wait 0 ms before doing the action and do it every duration in seconds decided by times the method is repeated per second
-        System.out.println("after?");
     }
 
-    private void teleportPlayer() {
-        // Player gets teleported here
+    private void teleportPlayer(Player player, Location loc) {
+        UUID id = player.getUniqueId();
+        Bukkit.getWorld("world").playSound(loc, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 10.0F, 0.5F);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.teleport(loc);
+            }
+        }.runTask(Magic.getPlugin());
+        Chat.chatSuccess(player, "Teleport successful");
     }
 }
