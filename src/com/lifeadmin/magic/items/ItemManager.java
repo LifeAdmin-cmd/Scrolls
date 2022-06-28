@@ -27,11 +27,10 @@ public class ItemManager {
 
     public ItemStack getScrollOfTeleportation() {
         this.createTeleportScroll();
-        System.out.println("getScroll hat das hier: " + this.scrollOfTeleportation);
         return this.scrollOfTeleportation;
     }
 
-    public ItemStack getCommandScrollOfTeleportation() {
+public ItemStack getCommandScrollOfTeleportation() {
         ItemMeta meta = scrollOfTeleportation.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
@@ -62,14 +61,15 @@ public class ItemManager {
         // Shaped Recipe
         ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("scroll-of-teleportation"), this.scrollOfTeleportation);
         sr.shape(
-                " D ",
-                " M ",
-                " C "
+                "EDE",
+                "PMP",
+                "ECE"
         );
         sr.setIngredient('D', Material.DIAMOND);
         sr.setIngredient('M', Material.MAP);
+        sr.setIngredient('P', Material.PAPER);
         sr.setIngredient('C', Material.RECOVERY_COMPASS);
-        System.out.println(sr);
+        sr.setIngredient('E', Material.ENDER_PEARL);
         Bukkit.getServer().addRecipe(sr);
     }
 }

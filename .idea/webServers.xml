@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="2595a8de-ee6f-4bac-b1fb-31f4399c9f8d" name="HomeServer_dev" url="">
+        <fileTransfer rootFolder="/home/lars/devMCServer/plugins" accessType="SFTP" host="172.17.49.10" port="22" sshConfigId="3f8ed92d-30a2-490a-bbdd-7ee09b59b35c" sshConfig="lars@172.17.49.10:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

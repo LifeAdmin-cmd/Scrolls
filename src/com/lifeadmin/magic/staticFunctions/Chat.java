@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 public class Chat {
     private static final String prefix = ChatColor.LIGHT_PURPLE + "[Magic] ";
+
     public static void chatError(Player sender, String message) {
         sender.sendMessage(prefix + ChatColor.RED + message);
     }

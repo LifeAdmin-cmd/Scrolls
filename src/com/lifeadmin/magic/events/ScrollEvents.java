@@ -5,6 +5,7 @@ import com.lifeadmin.magic.items.ItemManager;
 import com.lifeadmin.magic.staticFunctions.Calcs;
 import com.lifeadmin.magic.staticFunctions.Chat;
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,63 +23,78 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class ScrollEvents implements Listener {
-    private static final HashMap<UUID, LocalDateTime> cooldownArray = new HashMap<>();
+
+    public ScrollEvents(Integer maxDistance, Integer coolDown, Boolean skipWorldCheck) {
+        this.maxDistance = maxDistance;
+        this.coolDown = coolDown;
+        this.skipWorldCheck = skipWorldCheck;
+    }
+
+    private final double maxDistance;
+    private final int coolDown;
+    private final boolean skipWorldCheck;
+
+    private final HashMap<UUID, LocalDateTime> coolDownArray = new HashMap<>();
+
+    private final HashMap<UUID, Boolean> animationStatus = new HashMap<>();
 
     @EventHandler
-    public void onRightClick(PlayerToggleSneakEvent event) {
+    public void startTeleportEvent(PlayerToggleSneakEvent event) {
         if (!(event.getPlayer().isSneaking())) return;
 
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
 
-            if (item.getType() != Material.AIR) {
-                Player player = event.getPlayer();
-                PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-                if (!(data.has(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY))) {
-                    if ((data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) {
-                        Chat.chatError(player, "There was no destination set for this scroll!");
-                        return;
-                    }
+        if (item.getType() != Material.AIR) {
+            Player player = event.getPlayer();
+            PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
+            if (!(data.has(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY))) {
+                if ((data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) {
+                    Chat.chatError(player, "There was no destination set for this scroll!");
                     return;
                 }
+                return;
+            }
 
-                UUID id = player.getUniqueId();
-                cooldownArray.putIfAbsent(id, LocalDateTime.now());
-                LocalDateTime cooldownDateTime = cooldownArray.get(id);
+            if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                Chat.chatError(player, "You cannot cast this spell while moving!");
+                return;
+            }
 
-                if (LocalDateTime.now().isBefore(cooldownDateTime)) {
-                    Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(cooldownDateTime, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
-                    return;
-                }
+            UUID id = player.getUniqueId();
+            coolDownArray.putIfAbsent(id, LocalDateTime.now());
+            LocalDateTime coolDownDateTime = coolDownArray.get(id);
 
-                int[] cords = data.get(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY);
+            if (LocalDateTime.now().isBefore(coolDownDateTime)) {
+                Chat.chatError(event.getPlayer(), "You have to wait: " + ChatColor.YELLOW + String.valueOf(LocalDateTime.now().until(coolDownDateTime, ChronoUnit.SECONDS)) + " Seconds" + ChatColor.RED + " before you can use a scroll of this type again!");
+                return;
+            }
 
-                int x = cords[0];
-                int y = cords[1];
-                int z = cords[2];
+            int[] cords = data.get(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY);
 
-                Location playerPos = player.getLocation();
-                double distance = Math.sqrt(Math.pow(x - playerPos.getBlockX(), 2) + Math.pow(y - playerPos.getBlockY(), 2) + Math.pow(z - playerPos.getBlockZ(), 2));
+            int x = cords[0];
+            int y = cords[1];
+            int z = cords[2];
 
-                double maxDistance = 1500;
+            Location playerPos = player.getLocation();
+            double distance = Math.sqrt(Math.pow(x - playerPos.getBlockX(), 2) + Math.pow(y - playerPos.getBlockY(), 2) + Math.pow(z - playerPos.getBlockZ(), 2));
 
-                World destinationWorld = Bukkit.getWorld("world");
-                if (player.getWorld() == destinationWorld) {
-                    if (distance <= maxDistance) {
-                        Location loc = new Location(destinationWorld, x + 0.5, y, z + 0.5); // 0.5 places you in the middle of the Block
-                        shouldAnimationPlay = true;
-                        player.getInventory().removeItem(item);
-                        cooldownArray.put(id, LocalDateTime.now().plusSeconds(10));
-                        this.playTeleportAnimation(player, loc);
-                    } else {
-                        Chat.chatError(player, "You are too far away from your Destination!");
-                        Chat.chatWarning(player, "Your Destination: " +  Arrays.toString(cords));
-                        Chat.chatWarning(player, "Move " + Math.round(distance - maxDistance) + " blocks closer!");
-                    }
+            World destinationWorld = Bukkit.getWorld("world");
+            if (player.getWorld() == destinationWorld || this.skipWorldCheck) {
+                if (distance <= this.maxDistance || this.maxDistance == 0) {
+                    Location loc = new Location(destinationWorld, x + 0.5, y, z + 0.5); // 0.5 places you in the middle of the Block
+                    animationStatus.putIfAbsent(id, true);
+                    player.getInventory().removeItem(item);
+                    coolDownArray.put(id, LocalDateTime.now().plusSeconds(this.coolDown));
+                    this.playTeleportAnimation(player, loc);
                 } else {
-                    Chat.chatError(player, "You cannot teleport through worlds!");
-                    Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA +  destinationWorld.getName());
+                    Chat.chatError(player, "You are too far away from your Destination!");
+                    Chat.chatWarning(player, "Your Destination: " + Arrays.toString(cords));
+                    Chat.chatWarning(player, "Move " + Math.round(distance - maxDistance) + " blocks closer!");
                 }
-//            }
+            } else {
+                Chat.chatError(player, "You cannot teleport through worlds!");
+                Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA + destinationWorld.getName());
+            }
         }
     }
 
@@ -133,35 +149,24 @@ public class ScrollEvents implements Listener {
         }
     }
 
-    private static boolean shouldAnimationPlay = false;
-    private static boolean animationActiveStatus = false;
-
-    public static boolean getAnimationActiveStatus() {
-        return animationActiveStatus;
-    }
-
-    public static void setAnimationActiveStatus(boolean status) {
-        animationActiveStatus = status;
-    }
-
     @EventHandler
     private void preventMovementWhileTeleporting(PlayerMoveEvent event) {
-        if (!shouldAnimationPlay) return;
+        UUID id = event.getPlayer().getUniqueId();
+        if (!animationStatus.containsKey(id)) return;
         if (!event.getFrom().toVector().equals(event.getTo().toVector())) {
             event.setCancelled(true);
         }
     }
 
     private void playTeleportAnimation(Player player, Location loc) {
-        if (animationActiveStatus) return;
+        UUID id = player.getUniqueId();
+        animationStatus.put(id, true);
 
-        setAnimationActiveStatus(true);
-
-        Bukkit.getWorld("world").playSound(loc, Sound.BLOCK_PORTAL_TRIGGER, 3.0F, 0.5F);
+        Bukkit.getWorld("world").playSound(loc, Sound.BLOCK_PORTAL_TRIGGER, 8.0F, 0.5F);
 
         Timer timer = new Timer();
-        int duration = 8;//duration in seconds
-        int repetitions = 10;//how often the method is repeated every second
+        int duration = 8;// duration in seconds
+        int repetitions = 10;// how often the method is repeated every second
         timer.schedule(new TimerTask() {
             private int count = 0;
             private double circleHeight = 0;
@@ -173,29 +178,27 @@ public class ScrollEvents implements Listener {
                 circleHeight = circleHeight + multiplier;
                 if (count >= (duration * repetitions)) {
                     timer.cancel();
-                    setAnimationActiveStatus(false);
-                    shouldAnimationPlay = false;
-
                     teleportPlayer(player, loc);
                     return;
                 }
 
-                player.spawnParticle(Particle.DOLPHIN, player.getEyeLocation().add(0, 20, 0), 200, 0, 20, 0);
+                Bukkit.getWorld("world").spawnParticle(Particle.DOLPHIN, player.getEyeLocation().add(0, 20, 0), 200, 0, 20, 0);
                 for (int degree = 0; degree < 360; degree++) {
                     double radians = Math.toRadians(degree);
                     double x = Math.cos(radians)*1.5;
                     double z = Math.sin(radians)*1.5;
                     Location loc = player.getLocation();
                     loc.add(x, circleHeight - 0.5, z);
-                    player.spawnParticle(Particle.PORTAL, loc, 0, 0, 0, 0);
+                    player.getWorld().spawnParticle(Particle.PORTAL, loc, 0, 0, 0, 0);
                 }
             }
-        }, 0, (1000/repetitions));//wait 0 ms before doing the action and do it every duration in seconds decided by times the method is repeated per second
+        }, 0, (1000/repetitions));// wait 0 ms before doing the action and do it every repetitions per second
     }
 
     private void teleportPlayer(Player player, Location loc) {
         UUID id = player.getUniqueId();
-        Bukkit.getWorld("world").playSound(loc, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 10.0F, 0.5F);
+        animationStatus.remove(id);
+        Bukkit.getWorld("world").playSound(loc, Sound.ITEM_CHORUS_FRUIT_TELEPORT, 8.0F, 0.5F);
         new BukkitRunnable() {
             @Override
             public void run() {
