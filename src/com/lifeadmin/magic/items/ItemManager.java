@@ -5,6 +5,7 @@ import com.lifeadmin.magic.staticFunctions.Calcs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,8 @@ public class ItemManager {
         this.createTeleportScroll();
         this.addRecipes();
     }
+
+    private final FileConfiguration config = Magic.getPlugin().getConfig();
 
     public ItemStack getScrollOfTeleportation() {
         this.createTeleportScroll();
@@ -49,9 +52,14 @@ public ItemStack getCommandScrollOfTeleportation() {
         meta.addEnchant(Enchantment.LUCK, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
+        System.out.println(config.getInt(("maxDistance")));
+
         // make scrolls identifiable
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");
+        data.set(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance"));
+        data.set(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown"));
+        data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck"));
 
         item.setItemMeta(meta);
         scrollOfTeleportation = item;

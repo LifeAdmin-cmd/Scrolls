@@ -15,7 +15,8 @@
 
     # Allow interdimensional traveling, e.g. Nether -> End
     # This option disables the maxDistance when teleporting through worlds
-        skipWorldCheck: false
+    # (true: 1, false: 0)
+        skipWorldCheck: 0
 
   # Level 2:
 
@@ -29,7 +30,8 @@
 
     # Allow interdimensional traveling, e.g. Nether -> End
     # This option disables the maxDistance when teleporting through worlds
-        skipWorldCheck_lvl2: false
+    # (true: 1, false: 0)
+        skipWorldCheck_lvl2: 0
 
   # Level 3:
 
@@ -41,6 +43,7 @@
     # minimum 8 seconds
         coolDown_lvl3: 1800
 
-    # Allow interdimensional traveling (boolean)
-    # e.g. Nether -> End
-        skipWorldCheck_lvl3: true
+    # Allow interdimensional traveling, e.g. Nether -> End
+    # This option disables the maxDistance when teleporting through worlds
+    # (true: 1, false: 0)
+        skipWorldCheck_lvl3: 1

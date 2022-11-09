@@ -25,7 +25,7 @@ public class Magic extends JavaPlugin {
         itemManager = new ItemManager();
         MagicCommands commands = new MagicCommands();
         getCommand("basic_tp").setExecutor(commands);
-        getServer().getPluginManager().registerEvents(new ScrollEvents(getConfig().getInt("maxDistance"), getConfig().getInt("coolDown"), getConfig().getBoolean("skipWorldCheck")), this);
+        getServer().getPluginManager().registerEvents(new ScrollEvents(), this);
     }
 
     @Override

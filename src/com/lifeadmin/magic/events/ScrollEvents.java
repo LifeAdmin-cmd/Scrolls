@@ -24,16 +24,7 @@ import java.util.*;
 
 public class ScrollEvents implements Listener {
 
-    public ScrollEvents(Integer maxDistance, Integer coolDown, Boolean skipWorldCheck) {
-        this.maxDistance = maxDistance;
-        this.coolDown = coolDown;
-        this.skipWorldCheck = skipWorldCheck;
-    }
-
-    private final double maxDistance;
-    private final int coolDown;
-    private final boolean skipWorldCheck;
-
+    public ScrollEvents() {}
     private final HashMap<UUID, LocalDateTime> coolDownArray = new HashMap<>();
 
     private final HashMap<UUID, Boolean> animationStatus = new HashMap<>();
@@ -77,14 +68,17 @@ public class ScrollEvents implements Listener {
 
             Location playerPos = player.getLocation();
             double distance = Math.sqrt(Math.pow(x - playerPos.getBlockX(), 2) + Math.pow(y - playerPos.getBlockY(), 2) + Math.pow(z - playerPos.getBlockZ(), 2));
+            int maxDistance = data.get(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER);
+            int coolDown = data.get(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER);
+            int skipWorldCheck = data.get(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER);
 
             World destinationWorld = Bukkit.getWorld("world");
-            if (player.getWorld() == destinationWorld || this.skipWorldCheck) {
-                if (distance <= this.maxDistance || this.maxDistance == 0) {
+            if (player.getWorld() == destinationWorld || skipWorldCheck == 1) {
+                if (distance <= maxDistance || maxDistance == 0) {
                     Location loc = new Location(destinationWorld, x + 0.5, y, z + 0.5); // 0.5 places you in the middle of the Block
                     animationStatus.putIfAbsent(id, true);
                     player.getInventory().removeItem(item);
-                    coolDownArray.put(id, LocalDateTime.now().plusSeconds(this.coolDown));
+                    coolDownArray.put(id, LocalDateTime.now().plusSeconds(coolDown));
                     this.playTeleportAnimation(player, loc);
                 } else {
                     Chat.chatError(player, "You are too far away from your Destination!");
@@ -92,7 +86,7 @@ public class ScrollEvents implements Listener {
                     Chat.chatWarning(player, "Move " + Math.round(distance - maxDistance) + " blocks closer!");
                 }
             } else {
-                Chat.chatError(player, "You cannot teleport through worlds!");
+                Chat.chatError(player, "You cannot teleport through dimensions!");
                 Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA + destinationWorld.getName());
             }
         }
