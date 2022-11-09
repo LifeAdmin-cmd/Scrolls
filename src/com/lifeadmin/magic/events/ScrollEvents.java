@@ -140,10 +140,30 @@ public class ScrollEvents implements Listener {
 
                 Location loc = player.getTargetBlock(null, 100).getLocation();
 
+                System.out.println(loc);
+
                 int[] cords = { loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ() };
+
+                System.out.println(loc.getBlockX());
+                System.out.println(loc.getBlockY());
+                System.out.println(loc.getBlockZ());
 
                 data.set(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY, cords);
                 item.setItemMeta(meta);
+
+                List<String> lore = meta.getLore();
+
+                if (lore.size() >= 3) {
+                    lore.remove(lore.size() - 1);
+                    lore.remove(lore.size() - 1);
+                }
+
+                lore.add("");
+                lore.add("§7X:" + loc.getBlockX() + " Y: " + loc.getBlockY() + " Z: " + loc.getBlockZ());
+
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+
                 Chat.chatSuccess(player, "Spawn successfully written into the scroll!");
             }
         }
@@ -192,7 +212,7 @@ public class ScrollEvents implements Listener {
                     player.getWorld().spawnParticle(Particle.PORTAL, loc, 0, 0, 0, 0);
                 }
             }
-        }, 0, (1000/repetitions));// wait 0 ms before doing the action and do it every repetitions per second
+        }, 0, (1000/repetitions));// wait 0 ms before doing the action and do it every x repetitions per second
     }
 
     private void teleportPlayer(Player player, Location loc) {

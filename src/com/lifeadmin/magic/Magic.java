@@ -3,7 +3,6 @@ package com.lifeadmin.magic;
 import com.lifeadmin.magic.commands.MagicCommands;
 import com.lifeadmin.magic.events.ScrollEvents;
 import com.lifeadmin.magic.items.ItemManager;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Magic extends JavaPlugin {
