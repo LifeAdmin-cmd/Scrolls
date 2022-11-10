@@ -57,6 +57,7 @@ public ItemStack getCommandScrollOfTeleportation() {
         // make scrolls identifiable
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");
+        data.set(new NamespacedKey(Magic.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER, 1);
         data.set(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance"));
         data.set(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown"));
         data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck"));

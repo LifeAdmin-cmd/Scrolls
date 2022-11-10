@@ -1,6 +1,7 @@
 package com.lifeadmin.magic.events;
 
 import com.lifeadmin.magic.Magic;
+import com.lifeadmin.magic.inventories.UpgradeScroll;
 import com.lifeadmin.magic.items.ItemManager;
 import com.lifeadmin.magic.staticFunctions.Calcs;
 import com.lifeadmin.magic.staticFunctions.Chat;
@@ -129,7 +130,7 @@ public class ScrollEvents implements Listener {
                 ItemMeta meta = item.getItemMeta();
                 PersistentDataContainer data = meta.getPersistentDataContainer();
 
-                // Check if item is a scroll (unused || used), otherwise returns
+                // Check if item is a scroll, otherwise returns
                 if (!(data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
 
                 Location loc = player.getTargetBlock(null, 100).getLocation();
@@ -220,5 +221,23 @@ public class ScrollEvents implements Listener {
             }
         }.runTask(Magic.getPlugin());
         Chat.chatSuccess(player, "Teleport successful");
+    }
+
+    @EventHandler
+    public static void onRightClick(PlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
+            if (event.getItem() != null) {
+                ItemStack item = event.getItem();
+                ItemMeta meta = item.getItemMeta();
+                PersistentDataContainer data = meta.getPersistentDataContainer();
+
+                // Check if item is a scroll, otherwise returns
+                if (!(data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
+
+                UpgradeScroll gui = new UpgradeScroll();
+                player.openInventory(gui.getInventory());
+            }
+        }
     }
 }

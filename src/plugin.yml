@@ -7,3 +7,6 @@ commands:
   basic_tp:
     description: Gives a player a Scroll Of Teleportation
     usage: /<command>
+  confirm:
+    description: test gui
+    usage: /<command>
