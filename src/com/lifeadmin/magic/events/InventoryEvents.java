@@ -57,7 +57,7 @@ public class InventoryEvents implements Listener {
 
         int level = data.get(new NamespacedKey(Magic.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER);
         if (level == 1) {
-            int cost = config.getInt("upgradingCostLvl2");
+            int cost = config.getInt("upgradingCost_lvl2");
             if (player.getTotalExperience() < cost) {
                 Chat.chatWarning(player, "You dont have enough XP to upgrade this scroll!");
                 Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - player.getTotalExperience()) + ChatColor.YELLOW + " more XP!");
@@ -74,7 +74,7 @@ public class InventoryEvents implements Listener {
             data.set(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown_lvl2"));
             data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck_lvl2"));
         } else if (level == 2) {
-            int cost = config.getInt("upgradingCostLvl3");
+            int cost = config.getInt("upgradingCost_lvl3");
             if (player.getTotalExperience() < cost) {
                 Chat.chatWarning(player, "You dont have enough XP to upgrade this scroll!");
                 Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - player.getTotalExperience()) + ChatColor.YELLOW + " more XP!");

@@ -1,53 +1,42 @@
 # These are the default settings for this plugin, feel free to change the values to your needs
-# Warning! Reloading the script / restarting the server will delete all active cool downs
+
+# Warning! Reloading the script / restarting the server will delete all active cool downs!
+# Warning! Changes to this config will not affect scrolls that are already on the server!
 
 # Scroll Of Teleportation
 
-  # Level 1:
-
+  # Distances
     # max distance in blocks that can be traveled (integer)
     # can be set to 0 to disable the distance restriction
         maxDistance: 2000
 
+        maxDistance_lvl2: 10000
+
+        maxDistance_lvl3: 0
+
+  # Cooldowns
     # cool down in seconds before you can cast this spell again (integer)
     # minimum 8 seconds
         coolDown: 900
 
+        coolDown_lvl2: 1350
+
+        coolDown_lvl3: 1800
+
+  # Skip world checks
     # Allow interdimensional traveling, e.g. Nether -> End
     # This option disables the maxDistance when teleporting through worlds
     # (true: 1, false: 0)
         skipWorldCheck: 0
 
-  # Level 2:
-
-    # max distance in blocks that can be traveled (integer)
-    # can be set to 0 to disable the distance restriction
-        maxDistance_lvl2: 10000
-
-    # cool down in seconds before you can cast this spell again (integer)
-    # minimum 8 seconds
-        coolDown_lvl2: 1350 # Integer
-
-    # Allow interdimensional traveling, e.g. Nether -> End
-    # This option disables the maxDistance when teleporting through worlds
-    # (true: 1, false: 0)
         skipWorldCheck_lvl2: 0
 
-  # Level 3:
-
-    # max distance in blocks that can be traveled (integer)
-    # can be set to 0 to disable the distance restriction
-        maxDistance_lvl3: 0
-
-    # cool down in seconds before you can cast this spell again (integer)
-    # minimum 8 seconds
-        coolDown_lvl3: 1800
-
-    # Allow interdimensional traveling, e.g. Nether -> End
-    # This option disables the maxDistance when teleporting through worlds
-    # (true: 1, false: 0)
         skipWorldCheck_lvl3: 1
 
-        upgradingCostLvl2: 700
+  # Upgrading costs
+    # Costs to upgrade a scroll to the next level
+    # upgrades are paid with XP (1395 XP equals lvl 0 -> lvl 30)
+    # If you choose to change the values you can use xp calculators
+        upgradingCost_lvl2: 700
 
-        upgradingCostLvl3: 1600
+        upgradingCost_lvl3: 1600
