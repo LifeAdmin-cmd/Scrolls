@@ -4,9 +4,7 @@ import com.lifeadmin.magic.Magic;
 import com.lifeadmin.magic.inventories.UpgradeScroll;
 import com.lifeadmin.magic.staticFunctions.Chat;
 import com.lifeadmin.magic.staticFunctions.Experience;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -98,6 +96,9 @@ public class InventoryEvents implements Listener {
             player.closeInventory();
             return;
         }
+
+        Bukkit.getWorld("world").playSound(player.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 8.0F, 0.5F);
+        Bukkit.getWorld("world").playSound(player.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 8.0F, 0.5F);
 
         scroll.setItemMeta(meta);
 
