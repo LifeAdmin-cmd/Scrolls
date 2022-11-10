@@ -3,6 +3,7 @@ package com.lifeadmin.magic.events;
 import com.lifeadmin.magic.Magic;
 import com.lifeadmin.magic.inventories.UpgradeScroll;
 import com.lifeadmin.magic.staticFunctions.Chat;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -56,7 +57,14 @@ public class InventoryEvents implements Listener {
 
         int level = data.get(new NamespacedKey(Magic.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER);
         if (level == 1) {
-            meta.setDisplayName("§3Greater Scroll Of Teleportation");
+            int cost = config.getInt("upgradingCostLvl2");
+            if (player.getTotalExperience() < cost) {
+                Chat.chatWarning(player, "You dont have enough XP to upgrade this scroll!");
+                Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - player.getTotalExperience()) + ChatColor.YELLOW + " more XP!");
+                player.closeInventory();
+                return;
+            }
+            meta.setDisplayName("§9Greater Scroll Of Teleportation");
             List<String> lore = meta.getLore();
             lore.set(0, "§7This Scroll Of Teleportation was made");
             lore.set(1, "§7with excellent expertise and craftsmanship");
@@ -66,6 +74,13 @@ public class InventoryEvents implements Listener {
             data.set(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown_lvl2"));
             data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck_lvl2"));
         } else if (level == 2) {
+            int cost = config.getInt("upgradingCostLvl3");
+            if (player.getTotalExperience() < cost) {
+                Chat.chatWarning(player, "You dont have enough XP to upgrade this scroll!");
+                Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - player.getTotalExperience()) + ChatColor.YELLOW + " more XP!");
+                player.closeInventory();
+                return;
+            }
             meta.setDisplayName("§6Ultimate Scroll Of Teleportation");
             List<String> lore = meta.getLore();
             lore.set(0, "§7This perfect Scroll Of Teleportation was made");
@@ -77,6 +92,7 @@ public class InventoryEvents implements Listener {
             data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck_lvl3"));
         } else {
             Chat.chatWarning(player, "There is no upgrade for this scroll available!");
+            player.closeInventory();
             return;
         }
 

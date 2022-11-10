@@ -52,8 +52,6 @@ public ItemStack getCommandScrollOfTeleportation() {
         meta.addEnchant(Enchantment.LUCK, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
-        System.out.println(config.getInt(("maxDistance")));
-
         // make scrolls identifiable
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");

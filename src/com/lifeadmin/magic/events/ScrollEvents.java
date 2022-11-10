@@ -135,13 +135,7 @@ public class ScrollEvents implements Listener {
 
                 Location loc = player.getTargetBlock(null, 100).getLocation();
 
-                System.out.println(loc);
-
                 int[] cords = { loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ() };
-
-                System.out.println(loc.getBlockX());
-                System.out.println(loc.getBlockY());
-                System.out.println(loc.getBlockZ());
 
                 data.set(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY, cords);
                 item.setItemMeta(meta);

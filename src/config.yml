@@ -47,3 +47,7 @@
     # This option disables the maxDistance when teleporting through worlds
     # (true: 1, false: 0)
         skipWorldCheck_lvl3: 1
+
+        upgradingCostLvl2: 700
+
+        upgradingCostLvl3: 1600
