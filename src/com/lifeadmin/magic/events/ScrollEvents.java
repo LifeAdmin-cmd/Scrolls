@@ -46,8 +46,8 @@ public class ScrollEvents implements Listener {
                 }
                 return;
             }
-
-            if (player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+            Material blockUnderPlayer = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
+            if (blockUnderPlayer == Material.AIR || blockUnderPlayer == Material.CAVE_AIR || blockUnderPlayer == Material.VOID_AIR) {
                 Chat.chatError(player, "You cannot cast this spell while moving!");
                 return;
             }
@@ -72,11 +72,12 @@ public class ScrollEvents implements Listener {
             int maxDistance = data.get(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER);
             int coolDown = data.get(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER);
             int skipWorldCheck = data.get(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER);
+            String destinationWorld = data.get(new NamespacedKey(Magic.getPlugin(), "destinationWorld"), PersistentDataType.STRING);
 
-            World destinationWorld = Bukkit.getWorld("world");
-            if (player.getWorld() == destinationWorld || skipWorldCheck == 1) {
-                if (distance <= maxDistance || maxDistance == 0) {
-                    Location loc = new Location(destinationWorld, x + 0.5, y, z + 0.5); // 0.5 places you in the middle of the Block
+            // World destinationWorld = Bukkit.getWorld("world");
+            if (Objects.equals(player.getWorld().getName(), destinationWorld) || skipWorldCheck == 1) {
+                if (distance <= maxDistance || maxDistance == 0 || !Objects.equals(player.getWorld().toString(), destinationWorld)) {
+                    Location loc = new Location(Bukkit.getWorld(destinationWorld), x + 0.5, y, z + 0.5); // 0.5 places you in the middle of the Block
                     animationStatus.putIfAbsent(id, true);
                     player.getInventory().removeItem(item);
                     coolDownArray.put(id, LocalDateTime.now().plusSeconds(coolDown));
@@ -87,8 +88,13 @@ public class ScrollEvents implements Listener {
                     Chat.chatWarning(player, "Move " + Math.round(distance - maxDistance) + " blocks closer!");
                 }
             } else {
-                Chat.chatError(player, "You cannot teleport through dimensions!");
-                Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA + destinationWorld.getName());
+                Chat.chatError(player, "You cannot teleport through dimensions with this scroll!");
+                String worldName = destinationWorld;
+                if (Objects.equals(destinationWorld, "world")) { worldName = "Overworld"; }
+                if (Objects.equals(destinationWorld, "world_nether")) { worldName = "Nether"; }
+                if (Objects.equals(destinationWorld, "world_end")) { worldName = "The End"; }
+
+                Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA + worldName);
             }
         }
     }
@@ -137,7 +143,10 @@ public class ScrollEvents implements Listener {
 
                 int[] cords = { loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ() };
 
+                String destinationWorld = loc.getWorld().getName();
+
                 data.set(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY, cords);
+                data.set(new NamespacedKey(Magic.getPlugin(), "destinationWorld"), PersistentDataType.STRING, destinationWorld);
                 item.setItemMeta(meta);
 
                 List<String> lore = meta.getLore();
@@ -147,8 +156,9 @@ public class ScrollEvents implements Listener {
                     lore.remove(lore.size() - 1);
                 }
 
+                // Adding teleport location to scroll lore
                 lore.add("");
-                lore.add("§7X:" + loc.getBlockX() + " Y: " + loc.getBlockY() + " Z: " + loc.getBlockZ());
+                lore.add("§7X:" + loc.getBlockX() + " Y: " + loc.getBlockY() + " Z: " + loc.getBlockZ() + " | World: " + destinationWorld);
 
                 meta.setLore(lore);
                 item.setItemMeta(meta);
