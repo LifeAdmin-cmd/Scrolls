@@ -1,0 +1,15 @@
+name: Scrolls
+version: 1.0.0
+author: LifeAdmin-cmd
+main: com.lifeadmin.scrolls.Scrolls
+api-version: 1.19
+commands:
+  scrolls:
+    description: Shows all available commands for this plugin
+    usage: /scrolls
+  scrolls tp:
+    description: Spawns new Scroll Of Teleportation
+    usage: /scrolls tp <levelOfScroll> <targetPlayer>
+  scrolls resetCd:
+    description: Restes the cooldown of one or all players
+    usage: /scrolls resetCd <targetPlayer / all>
