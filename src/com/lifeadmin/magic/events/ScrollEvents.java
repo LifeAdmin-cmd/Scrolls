@@ -89,12 +89,8 @@ public class ScrollEvents implements Listener {
                 }
             } else {
                 Chat.chatError(player, "You cannot teleport through dimensions with this scroll!");
-                String worldName = destinationWorld;
-                if (Objects.equals(destinationWorld, "world")) { worldName = "Overworld"; }
-                if (Objects.equals(destinationWorld, "world_nether")) { worldName = "Nether"; }
-                if (Objects.equals(destinationWorld, "world_end")) { worldName = "The End"; }
 
-                Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA + worldName);
+                Chat.chatWarning(player, "Destination world: " + ChatColor.AQUA + cleanupWorldName(destinationWorld));
             }
         }
     }
@@ -158,7 +154,7 @@ public class ScrollEvents implements Listener {
 
                 // Adding teleport location to scroll lore
                 lore.add("");
-                lore.add("§7X:" + loc.getBlockX() + " Y: " + loc.getBlockY() + " Z: " + loc.getBlockZ() + " | World: " + destinationWorld);
+                lore.add("§7X:" + loc.getBlockX() + " Y: " + loc.getBlockY() + " Z: " + loc.getBlockZ() + " | World: " + cleanupWorldName(destinationWorld));
 
                 meta.setLore(lore);
                 item.setItemMeta(meta);
@@ -243,5 +239,16 @@ public class ScrollEvents implements Listener {
                 player.openInventory(gui.getInventory());
             }
         }
+    }
+
+    /**
+     * Changes the world name to look better to the player if
+     * it is shown in a text or saved to a scroll
+     */
+    private static String cleanupWorldName(String worldName) {
+        if (Objects.equals(worldName, "world")) { worldName = "Overworld"; return worldName; }
+        if (Objects.equals(worldName, "world_nether")) { worldName = "Nether"; return worldName; }
+        if (Objects.equals(worldName, "world_end")) { worldName = "The End"; return worldName; }
+        return  worldName;
     }
 }

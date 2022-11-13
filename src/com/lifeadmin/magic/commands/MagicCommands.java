@@ -22,12 +22,6 @@ public class MagicCommands implements CommandExecutor {
             return true;
         }
 
-        if (cmd.getName().equalsIgnoreCase("confirm")) {
-            UpgradeScroll gui = new UpgradeScroll();
-            player.openInventory(gui.getInventory());
-            return true;
-        }
-
         return true;
     }
 }
