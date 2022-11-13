@@ -25,9 +25,8 @@ import java.util.*;
 
 public class ScrollEvents implements Listener {
 
-    public ScrollEvents() {}
-    private final HashMap<UUID, LocalDateTime> coolDownArray = new HashMap<>();
-
+    public ScrollEvents() {  }
+    public static HashMap<UUID, LocalDateTime> coolDownArray = new HashMap<>();
     private final HashMap<UUID, Boolean> animationStatus = new HashMap<>();
 
     @EventHandler

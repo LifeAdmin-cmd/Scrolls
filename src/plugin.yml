@@ -2,7 +2,7 @@ name: Magic
 version: 1.0.0
 author: LifeAdmin-cmd
 main: com.lifeadmin.magic.Magic
-api-version: 1.19.2
+api-version: 1.19
 commands:
   basic_tp:
     description: Gives a player a Scroll Of Teleportation
