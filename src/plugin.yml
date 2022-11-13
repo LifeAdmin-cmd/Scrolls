@@ -1,7 +1,7 @@
-name: Magic
+name: Scrolls
 version: 1.0.0
 author: LifeAdmin-cmd
-main: com.lifeadmin.magic.Magic
+main: com.lifeadmin.scrolls.Scrolls
 api-version: 1.19
 commands:
   scrolls:

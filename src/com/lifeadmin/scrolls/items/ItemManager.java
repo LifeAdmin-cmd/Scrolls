@@ -1,7 +1,7 @@
-package com.lifeadmin.magic.items;
+package com.lifeadmin.scrolls.items;
 
-import com.lifeadmin.magic.Magic;
-import com.lifeadmin.magic.staticFunctions.Calcs;
+import com.lifeadmin.scrolls.Scrolls;
+import com.lifeadmin.scrolls.staticFunctions.Calcs;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -26,7 +26,7 @@ public class ItemManager {
         this.addRecipes();
     }
 
-    private final FileConfiguration config = Magic.getPlugin().getConfig();
+    private final FileConfiguration config = Scrolls.getPlugin().getConfig();
 
     public ItemStack getScrollOfTeleportation() {
         this.createTeleportScroll();
@@ -36,7 +36,7 @@ public class ItemManager {
 public ItemStack getCommandScrollOfTeleportation() {
         ItemMeta meta = scrollOfTeleportation.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
         return this.scrollOfTeleportation;
     }
 
@@ -54,11 +54,11 @@ public ItemStack getCommandScrollOfTeleportation() {
 
         // make scrolls identifiable
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        data.set(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");
-        data.set(new NamespacedKey(Magic.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER, 1);
-        data.set(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance"));
-        data.set(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown"));
-        data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck"));
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER, 1);
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance"));
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown"));
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck"));
 
         item.setItemMeta(meta);
         scrollOfTeleportation = item;

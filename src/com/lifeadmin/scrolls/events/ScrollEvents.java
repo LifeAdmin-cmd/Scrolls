@@ -1,10 +1,9 @@
-package com.lifeadmin.magic.events;
+package com.lifeadmin.scrolls.events;
 
-import com.lifeadmin.magic.Magic;
-import com.lifeadmin.magic.inventories.UpgradeScroll;
-import com.lifeadmin.magic.items.ItemManager;
-import com.lifeadmin.magic.staticFunctions.Calcs;
-import com.lifeadmin.magic.staticFunctions.Chat;
+import com.lifeadmin.scrolls.Scrolls;
+import com.lifeadmin.scrolls.inventories.UpgradeScroll;
+import com.lifeadmin.scrolls.staticFunctions.Calcs;
+import com.lifeadmin.scrolls.staticFunctions.Chat;
 import org.bukkit.*;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -38,8 +37,8 @@ public class ScrollEvents implements Listener {
         if (item.getType() != Material.AIR) {
             Player player = event.getPlayer();
             PersistentDataContainer data = item.getItemMeta().getPersistentDataContainer();
-            if (!(data.has(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY))) {
-                if ((data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) {
+            if (!(data.has(new NamespacedKey(Scrolls.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY))) {
+                if ((data.has(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) {
                     Chat.chatError(player, "There was no destination set for this scroll!");
                     return;
                 }
@@ -62,7 +61,7 @@ public class ScrollEvents implements Listener {
 
             coolDownArray.remove(id);
 
-            int[] cords = data.get(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY);
+            int[] cords = data.get(new NamespacedKey(Scrolls.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY);
 
             int x = cords[0];
             int y = cords[1];
@@ -70,10 +69,10 @@ public class ScrollEvents implements Listener {
 
             Location playerPos = player.getLocation();
             double distance = Math.sqrt(Math.pow(x - playerPos.getBlockX(), 2) + Math.pow(y - playerPos.getBlockY(), 2) + Math.pow(z - playerPos.getBlockZ(), 2));
-            int maxDistance = data.get(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER);
-            int coolDown = data.get(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER);
-            int skipWorldCheck = data.get(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER);
-            String destinationWorld = data.get(new NamespacedKey(Magic.getPlugin(), "destinationWorld"), PersistentDataType.STRING);
+            int maxDistance = data.get(new NamespacedKey(Scrolls.getPlugin(), "maxDistance"), PersistentDataType.INTEGER);
+            int coolDown = data.get(new NamespacedKey(Scrolls.getPlugin(), "coolDown"), PersistentDataType.INTEGER);
+            int skipWorldCheck = data.get(new NamespacedKey(Scrolls.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER);
+            String destinationWorld = data.get(new NamespacedKey(Scrolls.getPlugin(), "destinationWorld"), PersistentDataType.STRING);
 
             // World destinationWorld = Bukkit.getWorld("world");
             if (Objects.equals(player.getWorld().getName(), destinationWorld) || skipWorldCheck == 1) {
@@ -102,10 +101,10 @@ public class ScrollEvents implements Listener {
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
 
-        if (!(data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
+        if (!(data.has(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
         if (event.isShiftClick()) event.setCancelled(true);
 
-        data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
         item.setItemMeta(meta);
     }
 
@@ -135,7 +134,7 @@ public class ScrollEvents implements Listener {
                 PersistentDataContainer data = meta.getPersistentDataContainer();
 
                 // Check if item is a scroll, otherwise returns
-                if (!(data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
+                if (!(data.has(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
 
                 Location loc = player.getTargetBlock(null, 100).getLocation();
 
@@ -143,8 +142,8 @@ public class ScrollEvents implements Listener {
 
                 String destinationWorld = loc.getWorld().getName();
 
-                data.set(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY, cords);
-                data.set(new NamespacedKey(Magic.getPlugin(), "destinationWorld"), PersistentDataType.STRING, destinationWorld);
+                data.set(new NamespacedKey(Scrolls.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY, cords);
+                data.set(new NamespacedKey(Scrolls.getPlugin(), "destinationWorld"), PersistentDataType.STRING, destinationWorld);
                 item.setItemMeta(meta);
 
                 List<String> lore = meta.getLore();
@@ -221,7 +220,7 @@ public class ScrollEvents implements Listener {
             public void run() {
                 player.teleport(loc);
             }
-        }.runTask(Magic.getPlugin());
+        }.runTask(Scrolls.getPlugin());
         Chat.chatSuccess(player, "Teleport successful");
     }
 
@@ -235,7 +234,7 @@ public class ScrollEvents implements Listener {
                 PersistentDataContainer data = meta.getPersistentDataContainer();
 
                 // Check if item is a scroll, otherwise returns
-                if (!(data.has(new NamespacedKey(Magic.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
+                if (!(data.has(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
 
                 UpgradeScroll gui = new UpgradeScroll();
                 player.openInventory(gui.getInventory());

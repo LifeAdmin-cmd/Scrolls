@@ -1,4 +1,4 @@
-package com.lifeadmin.magic.staticFunctions;
+package com.lifeadmin.scrolls.staticFunctions;
 
 import org.bukkit.entity.Player;
 

@@ -1,11 +1,10 @@
-package com.lifeadmin.magic.commands;
+package com.lifeadmin.scrolls.commands;
 
-import com.lifeadmin.magic.Magic;
-import com.lifeadmin.magic.events.ScrollEvents;
-import com.lifeadmin.magic.inventories.UpgradeScroll;
-import com.lifeadmin.magic.items.ItemManager;
-import com.lifeadmin.magic.staticFunctions.Calcs;
-import com.lifeadmin.magic.staticFunctions.Chat;
+import com.lifeadmin.scrolls.Scrolls;
+import com.lifeadmin.scrolls.events.ScrollEvents;
+import com.lifeadmin.scrolls.items.ItemManager;
+import com.lifeadmin.scrolls.staticFunctions.Calcs;
+import com.lifeadmin.scrolls.staticFunctions.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -23,7 +22,7 @@ import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
-public class MagicCommands implements CommandExecutor {
+public class ScrollsCommands implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -81,11 +80,11 @@ public class MagicCommands implements CommandExecutor {
     }
 
     private void spawnTeleportScroll(int level, Player player) {
-        ItemManager itemManager = Magic.getPlugin().getItemManager();
+        ItemManager itemManager = Scrolls.getPlugin().getItemManager();
         ItemStack scroll = itemManager.getScrollOfTeleportation();
         ItemMeta meta = scroll.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
-        data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
 
         if (level == 2) {
             meta.setDisplayName("§9Greater Scroll Of Teleportation");
@@ -102,11 +101,11 @@ public class MagicCommands implements CommandExecutor {
         }
 
         if (level > 1) {
-            FileConfiguration config = Magic.getPlugin().getConfig();
-            data.set(new NamespacedKey(Magic.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER, level);
-            data.set(new NamespacedKey(Magic.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance_lvl" + level));
-            data.set(new NamespacedKey(Magic.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown_lvl" + level));
-            data.set(new NamespacedKey(Magic.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck_lvl" + level));
+            FileConfiguration config = Scrolls.getPlugin().getConfig();
+            data.set(new NamespacedKey(Scrolls.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER, level);
+            data.set(new NamespacedKey(Scrolls.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance_lvl" + level));
+            data.set(new NamespacedKey(Scrolls.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown_lvl" + level));
+            data.set(new NamespacedKey(Scrolls.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck_lvl" + level));
         }
         scroll.setItemMeta(meta);
 

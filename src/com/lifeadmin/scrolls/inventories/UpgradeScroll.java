@@ -1,4 +1,4 @@
-package com.lifeadmin.magic.inventories;
+package com.lifeadmin.scrolls.inventories;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

@@ -1,9 +1,9 @@
-package com.lifeadmin.magic;
+package com.lifeadmin.scrolls;
 
-import com.lifeadmin.magic.commands.MagicCommands;
-import com.lifeadmin.magic.events.InventoryEvents;
-import com.lifeadmin.magic.events.ScrollEvents;
-import com.lifeadmin.magic.items.ItemManager;
+import com.lifeadmin.scrolls.commands.ScrollsCommands;
+import com.lifeadmin.scrolls.events.InventoryEvents;
+import com.lifeadmin.scrolls.events.ScrollEvents;
+import com.lifeadmin.scrolls.items.ItemManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Magic extends JavaPlugin {
-    private static Magic plugin;
+public class Scrolls extends JavaPlugin {
+    private static Scrolls plugin;
 
-    public static Magic getPlugin() {
+    public static Scrolls getPlugin() {
         return plugin;
     }
 
@@ -32,7 +32,7 @@ public class Magic extends JavaPlugin {
         saveDefaultConfig();
         plugin = this;
         itemManager = new ItemManager();
-        MagicCommands commands = new MagicCommands();
+        ScrollsCommands commands = new ScrollsCommands();
         getCommand("scrolls").setExecutor(commands);
         getServer().getPluginManager().registerEvents(new ScrollEvents(), this);
         getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
