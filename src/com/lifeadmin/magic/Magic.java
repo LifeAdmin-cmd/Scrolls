@@ -33,7 +33,7 @@ public class Magic extends JavaPlugin {
         plugin = this;
         itemManager = new ItemManager();
         MagicCommands commands = new MagicCommands();
-        getCommand("basic_tp").setExecutor(commands);
+        getCommand("scrolls").setExecutor(commands);
         getServer().getPluginManager().registerEvents(new ScrollEvents(), this);
         getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
         try {

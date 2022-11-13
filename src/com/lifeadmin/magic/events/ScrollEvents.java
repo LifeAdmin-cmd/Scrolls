@@ -60,6 +60,8 @@ public class ScrollEvents implements Listener {
                 return;
             }
 
+            coolDownArray.remove(id);
+
             int[] cords = data.get(new NamespacedKey(Magic.getPlugin(), "cords"), PersistentDataType.INTEGER_ARRAY);
 
             int x = cords[0];
@@ -107,19 +109,20 @@ public class ScrollEvents implements Listener {
         item.setItemMeta(meta);
     }
 
-    @EventHandler
-    public static void preventCommandScrollFromStacking(PlayerCommandPreprocessEvent event) {
-        if (!(event.getMessage().equals("/basic_tp"))) return;
-
-        ItemManager itemManager = Magic.getPlugin().getItemManager();
-        ItemStack scroll = itemManager.getScrollOfTeleportation();
-        ItemMeta meta = scroll.getItemMeta();
-        PersistentDataContainer data = meta.getPersistentDataContainer();
-        data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
-        scroll.setItemMeta(meta);
-
-        event.getPlayer().getInventory().addItem(scroll);
-    }
+//    @EventHandler
+//    public static void preventCommandScrollFromStacking(PlayerCommandPreprocessEvent event) {
+//        if (!(event.getMessage().equals("/basic_tp"))) return;
+//
+//        ItemManager itemManager = Magic.getPlugin().getItemManager();
+//        ItemStack scroll = itemManager.getScrollOfTeleportation();
+//        ItemMeta meta = scroll.getItemMeta();
+//        PersistentDataContainer data = meta.getPersistentDataContainer();
+//        data.set(new NamespacedKey(Magic.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
+//        scroll.setItemMeta(meta);
+//
+//        event.getPlayer().getInventory().addItem(scroll);
+//        Chat.chatSuccess(event.getPlayer(), "Scroll Of Teleportation added to your inventory!");
+//    }
 
     @EventHandler
     public static void onLeftClick(PlayerInteractEvent event) {

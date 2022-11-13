@@ -4,6 +4,12 @@ author: LifeAdmin-cmd
 main: com.lifeadmin.magic.Magic
 api-version: 1.19
 commands:
-  basic_tp:
-    description: Gives a player a Scroll Of Teleportation
-    usage: /<command>
+  scrolls:
+    description: Shows all available commands for this plugin
+    usage: /scrolls
+  scrolls tp:
+    description: Spawns new Scroll Of Teleportation
+    usage: /scrolls tp <levelOfScroll> <targetPlayer>
+  scrolls resetCd:
+    description: Restes the cooldown of one or all players
+    usage: /scrolls resetCd <targetPlayer / all>
