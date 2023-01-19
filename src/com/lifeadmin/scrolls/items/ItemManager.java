@@ -17,21 +17,51 @@ import org.bukkit.persistence.PersistentDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lifeadmin.scrolls.items.ItemFactory;
-
 public class ItemManager {
 
     public ItemStack scrollOfTeleportation;
 
     public ItemManager() {
-        this.scrollOfTeleportation = ItemFactory.createTeleportScroll();
+        this.createTeleportScroll();
         this.addRecipes();
     }
 
     private final FileConfiguration config = Scrolls.getPlugin().getConfig();
 
     public ItemStack getScrollOfTeleportation() {
+        this.createTeleportScroll();
         return this.scrollOfTeleportation;
+    }
+
+public ItemStack getCommandScrollOfTeleportation() {
+        ItemMeta meta = scrollOfTeleportation.getItemMeta();
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());
+        return this.scrollOfTeleportation;
+    }
+
+    private void createTeleportScroll() {
+        ItemStack item = new ItemStack(Material.PAPER, 1);
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        meta.setDisplayName("§5Scroll Of Teleportation");
+        List<String> lore = new ArrayList<>();
+        lore.add("§7This Scroll Of Teleportation was made");
+        lore.add("§7with good expertise and craftsmanship");
+        meta.setLore(lore);
+        meta.addEnchant(Enchantment.LUCK, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        // make scrolls identifiable
+        PersistentDataContainer data = meta.getPersistentDataContainer();
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING, "true");
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER, 1);
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "maxDistance"), PersistentDataType.INTEGER, config.getInt("maxDistance"));
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "coolDown"), PersistentDataType.INTEGER, config.getInt("coolDown"));
+        data.set(new NamespacedKey(Scrolls.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, config.getInt("skipWorldCheck"));
+
+        item.setItemMeta(meta);
+        scrollOfTeleportation = item;
     }
 
     private void addRecipes() {
