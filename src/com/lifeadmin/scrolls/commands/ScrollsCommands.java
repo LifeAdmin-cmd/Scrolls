@@ -81,7 +81,7 @@ public class ScrollsCommands implements CommandExecutor {
 
     private void spawnTeleportScroll(int level, Player player) {
         ItemManager itemManager = Scrolls.getPlugin().getItemManager();
-        ItemStack scroll = itemManager.getScrollOfTeleportation();
+        ItemStack scroll = itemManager.scrollOfTeleportation;
         ItemMeta meta = scroll.getItemMeta();
         PersistentDataContainer data = meta.getPersistentDataContainer();
         data.set(new NamespacedKey(Scrolls.getPlugin(), "randomNumberToIdentify"), PersistentDataType.DOUBLE, Calcs.getRandomDouble());

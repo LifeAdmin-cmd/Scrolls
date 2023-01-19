@@ -46,7 +46,7 @@ public class ScrollEvents implements Listener {
             }
             Material blockUnderPlayer = player.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
             if (blockUnderPlayer == Material.AIR || blockUnderPlayer == Material.CAVE_AIR || blockUnderPlayer == Material.VOID_AIR) {
-                Chat.chatError(player, "You cannot cast this spell while moving!");
+                Chat.chatError(player, "You cannot use this scroll while moving!");
                 return;
             }
 
