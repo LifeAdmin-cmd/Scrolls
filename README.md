@@ -43,7 +43,7 @@ The "startTeleportEvent" method now creates a new instance of the "TeleportComma
 
 - The "isValidScroll()" method checks if the item in the main hand is a scroll.
 - The "hasValidCords()" method checks if the scroll has a valid destination
-- The execute()" method contains all the logic related to teleporting the player and validating the scroll, and it also returns a boolean.
+- The "execute()" method contains all the logic related to teleporting the player and validating the scroll, and it also returns a boolean.
 
 By encapsulating the logic related to teleporting the player in a separate class, the "startTeleportEvent" method is now simpler, more readable, and easier to maintain. Additionally, the "TeleportCommand" class can be reused in other parts of the codebase, or even in other projects, making the code more reusable and flexible.
 
