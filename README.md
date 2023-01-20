@@ -13,7 +13,7 @@ Scrolls is a Minecraft Spigot which enables players to teleport to previously sa
 
 ## Screenshots
 
-![Plugin Screenshot](https://i.ibb.co/bzy3wcf/2023-01-20-14-50-42.png)
+![Plugin Screenshot](https://i.ibb.co/hHSFwXg/2023-01-20-14-50-42.png)
 
 ## Documentation
 
