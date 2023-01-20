@@ -11,5 +11,5 @@ commands:
     description: Spawns new Scroll Of Teleportation
     usage: /scrolls tp <levelOfScroll> <targetPlayer>
   scrolls resetCd:
-    description: Restes the cooldown of one or all players
+    description: Resets the cooldown of one or all players
     usage: /scrolls resetCd <targetPlayer / all>
