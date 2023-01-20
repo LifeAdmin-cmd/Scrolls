@@ -16,12 +16,12 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
-public class ScrollFacade {
+public class UpgradeScrollFacade {
     private final InventoryEvents inventoryEvents;
 
     private final FileConfiguration config = Scrolls.getPlugin().getConfig();
 
-    public ScrollFacade(InventoryEvents inventoryEvents) {
+    public UpgradeScrollFacade(InventoryEvents inventoryEvents) {
         this.inventoryEvents = inventoryEvents;
     }
 
