@@ -96,6 +96,9 @@ public class ScrollEvents implements Listener {
                 // Check if item is a scroll, otherwise returns
                 if (!(data.has(new NamespacedKey(Scrolls.getPlugin(), "ScrollOfTeleportation"), PersistentDataType.STRING))) return;
 
+                // Prevent Blocks from breaking
+                event.setCancelled(true);
+
                 Location loc = player.getTargetBlock(null, 100).getLocation();
 
                 int[] cords = { loc.getBlockX(), loc.getBlockY() + 1, loc.getBlockZ() };

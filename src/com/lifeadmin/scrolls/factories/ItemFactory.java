@@ -1,4 +1,4 @@
-package com.lifeadmin.scrolls.items;
+package com.lifeadmin.scrolls.factories;
 
 import com.lifeadmin.scrolls.Scrolls;
 import org.bukkit.Material;
