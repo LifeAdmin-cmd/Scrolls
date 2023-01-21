@@ -75,7 +75,7 @@ public class ScrollsCommands implements CommandExecutor {
     }
 
     private void addTeleportScroll(int level, Player player) {
-        ItemStack scroll = scrollFactory.spawnTeleportScroll(level, player);
+        ItemStack scroll = scrollFactory.spawnTeleportScroll(level);
         player.getInventory().addItem(scroll);
     }
 

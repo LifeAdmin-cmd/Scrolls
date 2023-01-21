@@ -11,9 +11,15 @@ Since I was already working on this project detached form the SDE course I asked
 
 The factory pattern is a creational design pattern that provides an interface for creating objects in a super class, but allows subclasses to alter the type of objects that will be created. It is a way to separate the logic of creating an object from the object itself.
 
-In my project I refactored the createTeleportScroll method, which creates an instance of the ItemStack class, into a new factory class called "ItemFactory". It can be found at /items/ItemFactory. The ItemFactory class contains a single static method called createTeleportScroll, which is responsible for creating and configuring the scroll of teleportation item. The ItemManager class now uses the factory method to create the scroll of teleportation item instead of creating it directly.
+### ItemFactory
+
+In my project I refactored the "createTeleportScroll" method, which creates an instance of the "ItemStack" class, into a new factory class called "ItemFactory". It can be found at "/factories/ItemFactory". The "ItemFactory" class contains a single static method called "createTeleportScroll", which is responsible for creating and configuring the scroll of teleportation item. The ItemManager class now uses the factory method to create the scroll of teleportation item instead of creating it directly.
 
 This separation of concerns allows for better flexibility and maintainability, as the logic for creating the item is now encapsulated in the factory class, and can be easily reused or modified without affecting the rest of the codebase. Additionally, it allows for the easy creation of different types of items in the future by creating new factory methods.
+
+### ScrollFactory
+
+In the project I refactored the scroll creating process of the "ScrollCommands" class into a new class called "ScrollFactory". The newly added class "/factories/ScrollFactory" has one method called "spawnTeleportScroll" that accepts a parameter "level", which determines the returned "ItemStack". This method is responsible for creating new scrolls with different attributes based on the given level.
 
 ## Structural Design Pattern
 

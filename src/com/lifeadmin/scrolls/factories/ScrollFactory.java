@@ -16,7 +16,7 @@ import java.util.List;
 public class ScrollFactory {
     public ScrollFactory() {
     }
-    public ItemStack spawnTeleportScroll(int level, Player player) {
+    public ItemStack spawnTeleportScroll(int level) {
         ItemManager itemManager = Scrolls.getPlugin().getItemManager();
         ItemStack scroll = itemManager.scrollOfTeleportation;
         ItemMeta meta = scroll.getItemMeta();
