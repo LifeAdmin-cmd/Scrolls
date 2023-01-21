@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import com.lifeadmin.scrolls.items.ItemFactory;
+import com.lifeadmin.scrolls.factories.ItemFactory;
 
 public class ItemManager {
     public ItemStack scrollOfTeleportation;
