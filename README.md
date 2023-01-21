@@ -23,13 +23,23 @@ In the project I refactored the scroll creating process of the "ScrollCommands" 
 
 ## Structural Design Pattern
 
-### Facade
+### Facades
+
+#### InventoryFacade
 
 The Facade Design pattern provides a simplified interface to a complex system of classes, it is used to hide the complexity of the system and provide a simple interface to the client.
 
 In the code, the logic for upgrading the scroll was scattered all across the "InventoryEvents" class, and it was difficult to understand it and make changes. To solve this problem, I created a new class called "/events/UpgradeScrollFacade" which contains the logic for upgrading the scroll. This class provides a simplified interface for upgrading the scroll, hiding the complexity of the system from the client.
 
 The "InventoryEvents" class uses the "UpgradeScrollFacade" class's method to upgrade the scroll whenever a user clicks on the upgrade button in the inventory. This way, the "InventoryEvents" class does not need to know the details of how the scroll is upgraded, it simply calls the upgradeScroll method provided by the "UpgradeScrollFacade" class.
+
+#### ExperienceFacade
+
+The Experience class provides a set of complex methods for calculating a player's experience in a game, such as getExp() or getIntLevelFromExp(). These methods can be difficult for the client to use, especially if they are not familiar with the underlying mathematics.
+
+To solve this problem, I implemented the ExperienceFacade class, which acts as a facade for the Experience class. The ExperienceFacade class provides a simplified interface to the client, and it only exposes the methods that are necessary for the client to use. This makes the code more maintainable and easier to understand.
+
+The ExperienceFacade class does not have an instance of Experience but it's still able to access the methods of Experience via class name. The client interacts with the ExperienceFacade class instead of the Experience class, and the ExperienceFacade class in turn calls the appropriate methods of the Experience class. This provides a simpler, more user-friendly interface to the client, while still allowing access to the underlying functionality provided by the Experience class.
 
 ### Adapter
 
@@ -38,6 +48,8 @@ The Adapter Design pattern is a structural pattern that allows incompatible clas
 In the code, the logic for changing the world_name property of the Bukkit instance was not usable for being printed out since it uses "_" between instead of spaces. Inside the "ScrollEvents" and "Teleport Command" the name needs to be printed out however, for the user to actually being able to read it properly. Therefore, I refactored the responsible method into a new class called "/events/WorldNameAdapter".
 
 ## Behavioral design patterns
+
+### Command Pattern
 
 The Command pattern is a behavioral design pattern that encapsulates a request as an object, which allows for decoupling the command from the object that executes it. This allows for greater flexibility in the program, as the command can be passed around, stored, and executed at a later time.
 
@@ -52,6 +64,16 @@ The "startTeleportEvent" method now creates a new instance of the "TeleportComma
 - The "execute()" method contains all the logic related to teleporting the player and validating the scroll, and it also returns a boolean.
 
 By encapsulating the logic related to teleporting the player in a separate class, the "startTeleportEvent" method is now simpler, more readable, and easier to maintain. Additionally, the "TeleportCommand" class can be reused in other parts of the codebase, or even in other projects, making the code more reusable and flexible.
+
+### State Pattern
+
+The State pattern is a behavioral design pattern that allows an object to alter its behavior when its internal state changes. It is often used to encapsulate the behavior of an object that changes based on its current state.
+
+In the refactored code, the State interface defines a single method execute(), that must be implemented by any class that implements it. Two classes EnableState and DisableState were implemented which have the responsibility to handle the behavior of the plugin when the plugin is enabled or disabled. The EnableState class is called when the plugin is enabled, it retrieves the data from the file, and DisableState class is called when the plugin is disabled, it saves the data to the file. This allows for a clear separation of concerns and makes the code more modular and easy to understand.
+
+In the Scrolls class, the current state of the plugin is stored in a private variable state, and the onEnable() and onDisable() methods assign the appropriate state (EnableState or DisableState) to this variable and call the execute method of the current state. This allows the plugin to change its behavior depending on whether it is being enabled or disabled, without the Scrolls class having to know the details of how this behavior is implemented. Also, it was possible to refactor the methods responsible for saving and retrieving the data from the file into the dependent state classes.
+
+The State pattern used here makes the code more manageable, easier to understand, and easy to extend in the future. It also provides a way to encapsulate the behavior of the plugin, which makes the code more flexible and reusable.
 
 # Scrolls
 
