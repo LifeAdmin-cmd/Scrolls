@@ -2,7 +2,7 @@ package com.lifeadmin.scrolls.events;
 
 import com.lifeadmin.scrolls.Scrolls;
 import com.lifeadmin.scrolls.staticFunctions.Chat;
-import com.lifeadmin.scrolls.staticFunctions.Experience;
+import com.lifeadmin.scrolls.staticFunctions.ExperienceFacade;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -43,13 +43,13 @@ public class UpgradeScrollFacade {
         int level = data.get(new NamespacedKey(Scrolls.getPlugin(), "scrollLevel"), PersistentDataType.INTEGER);
         if (level == 1) {
             int cost = config.getInt("upgradingCost_lvl2");
-            if (Experience.getExp(player) < cost) {
+            if (ExperienceFacade.getTotalExperience(player) < cost) {
                 Chat.chatWarning(player, "You dont have enough XP to upgrade this scroll!");
-                Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - Experience.getExp(player)) + ChatColor.YELLOW + " more XP!");
+                Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - ExperienceFacade.getTotalExperience(player)) + ChatColor.YELLOW + " more XP!");
                 player.closeInventory();
                 return;
             }
-            Experience.changeExp(player, -cost);
+            ExperienceFacade.changeExp(player, -cost);
             meta.setDisplayName("§9Greater Scroll Of Teleportation");
             List<String> lore = meta.getLore();
             lore.set(0, "§7This Scroll Of Teleportation was made");
@@ -61,13 +61,13 @@ public class UpgradeScrollFacade {
             data.set(new NamespacedKey(Scrolls.getPlugin(), "skipWorldCheck"), PersistentDataType.INTEGER, this.config.getInt("skipWorldCheck_lvl2"));
         } else if (level == 2) {
             int cost = this.config.getInt("upgradingCost_lvl3");
-            if (Experience.getExp(player) < cost) {
+            if (ExperienceFacade.getTotalExperience(player) < cost) {
                 Chat.chatWarning(player, "You dont have enough XP to upgrade this scroll!");
-                Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - Experience.getExp(player)) + ChatColor.YELLOW + " more XP!");
+                Chat.chatWarning(player, "You need " + ChatColor.GREEN + (cost - ExperienceFacade.getTotalExperience(player)) + ChatColor.YELLOW + " more XP!");
                 player.closeInventory();
                 return;
             }
-            Experience.changeExp(player, -cost);
+            ExperienceFacade.changeExp(player, -cost);
             meta.setDisplayName("§6Ultimate Scroll Of Teleportation");
             List<String> lore = meta.getLore();
             lore.set(0, "§7This perfect Scroll Of Teleportation was made");

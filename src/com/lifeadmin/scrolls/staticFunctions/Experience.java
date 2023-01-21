@@ -123,6 +123,6 @@ public final class Experience {
         player.setExp((float) (levelAndExp - level));
     }
 
-    private Experience() {}
+    Experience() {}
 
 }
