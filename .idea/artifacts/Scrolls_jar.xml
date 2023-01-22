@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/../../Minecraft Server/plugins</output-path>
     <root id="archive" name="Scrolls.jar">
       <element id="module-output" name="Scrolls" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../Dependencies/spigot-api-1.19.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
