@@ -45,7 +45,7 @@ The Plugin offers basic commands that should be reserved for Admins only.
 
 Just put the .jar file into the plugins folder of your server, which will then create a new directory containing the config you can customize and a cooldowns file that you should not edit manually.
 
-You can download the .jar file here in from repo or from Spigot's website.
+You can download the .jar file here from repo or from Spigot's website.
 
 * Native: **Spigot 1.19.2**
 
